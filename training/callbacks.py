@@ -6,11 +6,11 @@ import tensorflow as tf
 
 def make_checkpoint_callback(config, sig, freq):
     checkpoints_path = config.CHECKPOINTS_PATH + "/" + config.RUN_NAME + sig + "/-E{epoch:04d}.ckpt"
-    print(checkpoints_path)
+    print("checkpoints_path:",checkpoints_path)
     if not config.TPU_MODE:
         makedirs(config.CHECKPOINTS_PATH + "/" + config.RUN_NAME + utils.now(), exist_ok=True)
     
-    return tf.keras.callbacks.ModelCheckpoint(filepath=checkpoints_path
+    return checkpoints_path, tf.keras.callbacks.ModelCheckpoint(filepath=checkpoints_path
                                               , save_weights_only=True
                                               , save_freq=freq
                                               , verbose=1)
@@ -18,9 +18,10 @@ def make_checkpoint_callback(config, sig, freq):
 
 def make_tensorboard_callback(config, sig, hist_freq=0):
     tensorboard_path = config.TENSORBOARD_PATH + "/" + config.RUN_NAME + sig
+    print("tensorboard_path:",tensorboard_path)
     if not config.TPU_MODE:
         makedirs(tensorboard_path, exist_ok=False)
-    return tf.keras.callbacks.TensorBoard(log_dir=tensorboard_path
+    return tensorboard_path, tf.keras.callbacks.TensorBoard(log_dir=tensorboard_path
                                           # , update_freq=config.TENSORBOARD_FREQ
                                           , histogram_freq=hist_freq
                                           )
